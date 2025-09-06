@@ -5,6 +5,13 @@ import type { ReactNode } from "react";
 import Providers from "./providers";
 import "./globals.css";
 import Login from "./components/login/Login";
+import UserGreet from "./components/sessionUser/UserGreet";
+
+export const metadata = {
+  title: "CXP Next",
+  description:
+    "CXP Next | a web app that you can use to track your Strava activities",
+};
 
 export default async function RootLayout({
   children,
@@ -13,20 +20,17 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  const metadata = {
-    title: "CXP Next",
-    description:
-      "CXP Next | a web app that you can use to track your Strava activities",
-  };
-
   return (
     <html lang="en">
-      <body>
+      <head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </head>
+      <body className="bg-rose-300">
         <header>
           {session ? (
-            <div>
-              <span>Welcome, {session.user?.name}</span>
-              <button>Logout</button>
+            <div className="p-5">
+              <UserGreet session={session} />
               <main>
                 <Providers>{children}</Providers>
               </main>
