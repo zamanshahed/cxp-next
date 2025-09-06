@@ -6,6 +6,8 @@ import Providers from "./providers";
 import "./globals.css";
 import Login from "./components/login/Login";
 import UserGreet from "./components/sessionUser/UserGreet";
+import Navbar from "./components/navigation/Navbar";
+import { useAuthStore } from "@/lib/store/authStore";
 
 export const metadata = {
   title: "CXP Next",
@@ -19,7 +21,9 @@ export default async function RootLayout({
   children: ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-
+  if (session) {
+    useAuthStore.setState({ authToken: session?.accessToken });
+  }
   return (
     <html lang="en">
       <head>
@@ -29,8 +33,13 @@ export default async function RootLayout({
       <body className="bg-rose-300">
         <header>
           {session ? (
-            <div className="p-5">
-              <UserGreet session={session} />
+            <div className="p-2 md:p-5">
+              <Navbar
+                username={session.user?.name || ""}
+                avatarUrl={session.user?.image || ""}
+                session={session}
+              />
+              <div className="mb-2" />
               <main>
                 <Providers>{children}</Providers>
               </main>

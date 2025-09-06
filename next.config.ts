@@ -11,6 +11,14 @@ const withPWA = createNextPWA({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.cloudfront.net",
+      },
+    ],
+  },
   plugins: { "@tailwindcss/postcss": {} },
 };
 
